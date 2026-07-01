@@ -1,0 +1,14 @@
+# full-moon in-process libFuzzer target (cargo-fuzz / libfuzzer-sys).
+# Feeds fuzz bytes as UTF-8 Lua source into full_moon::parse and, on success,
+# asserts the print(parse(x)) round-trip invariant the crate guarantees.
+project: savantenvs/full-moon
+target: roundtrip
+image: savantenvs/full-moon:latest
+
+cmds:
+  - cmd: /mayhem/roundtrip
+    libfuzzer: true
+
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/roundtrip/testsuite
