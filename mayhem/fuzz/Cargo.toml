@@ -1,0 +1,30 @@
+# Additive fuzz crate for the Mayhem integration. Lives under mayhem/fuzz/ and is
+# never part of upstream. It depends on the UNMODIFIED full_moon crate at the repo
+# root and exposes the SAME target name as the repo's own fuzz/ crate ("roundtrip"),
+# so target parity holds. We add this crate rather than reuse the in-workspace
+# full-moon/fuzz/ crate so nothing upstream is touched and the standalone [workspace]
+# keeps it out of the root workspace's resolution.
+[package]
+name = "full-moon-mayhem-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.full_moon]
+path = "../../full-moon"
+
+# Keep this crate out of the root crate's workspace resolution.
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "roundtrip"
+path = "fuzz_targets/roundtrip.rs"
+test = false
+doc = false
